@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>糖尿病視網膜病變辨識系統</title>
+</head>
+<body>
+    <h1>糖尿病視網膜病變辨識系統</h1>
+
+    <form id="uploadForm">
+        <label for="imageUpload">上傳眼底照片：</label>
+        <input type="file" id="imageUpload" name="image" accept="image/*">
+        <br><br>
+        <button type="submit">送出分析</button>
+    </form>
+
+    <h2>分析結果：</h2>
+    <div id="result">
+        <!-- 這裡會顯示分析結果 -->
+    </div>
+
+    <script>
+        // 稍後這裡會加 JavaScript 來送出圖片
+        document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+            e.preventDefault(); // 阻止表單預設重新載入
+
+            const input = document.getElementById('imageUpload');
+            if (input.files.length === 0) {
+                alert('請先選擇一張圖片！');
+                return;
+            }
+
+            // 準備要送的資料
+            const formData = new FormData();
+            formData.append('image', input.files[0]);
+
+            // 顯示「正在分析中」提示
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>分析中，請稍候…</p>';
+
+            try {
+                // 發送 POST 請求到後端
+                const resp = await fetch('http://127.0.0.1:5000/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+                if (!resp.ok) throw new Error('伺服器錯誤');
+                const data = await resp.json();
+
+                // 把結果顯示出來
+                resultDiv.innerHTML = `
+                    <p><strong>辨識代碼：</strong>${data.code}</p>
+                    <p><strong>診斷結果：</strong>${data.label}</p>
+                    <h3>糖尿病視網膜病變分級說明</h3>
+                    <ul>
+                        <li>0 – 無 DR：無異常。</li>
+                        <li>1 – 輕度 NPDR：只有微動脈瘤，對視力影響小。</li>
+                        <li>2 – 中度 NPDR：有微動脈瘤、棉絮斑…等。</li>
+                        <li>3 – 重度 NPDR：嚴重出血或血管異常。</li>
+                        <li>4 – 增殖性 DR：出現新生血管或玻璃體出血。</li>
+                    </ul>
+                `;
+            } catch (err) {
+                console.error(err);
+                resultDiv.innerHTML = `<p style="color:red;">發生錯誤：${err.message}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+flask
+flask-cors
+tensorflow       # 或 tensorflow-cpu
+pillow
+numpy
+opencv-python    # 如果你用到 cv2
