@@ -1,6 +1,9 @@
+tensorflow
+pandas
+scikit-learn
 flask
 flask-cors
-tensorflow       # 或 tensorflow-cpu
+opencv-python
 pillow
+matplotlib
 numpy
-opencv-python    # 如果你用到 cv2
