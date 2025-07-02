@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Diabetic Retinopathy Detector</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f7f7f7; }
+    .container { width: 800px; margin: 50px auto; padding: 20px; background: #fff;
+                 border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    h1 { text-align: center; }
+    .preview { text-align: center; margin: 20px; }
+    .preview img { max-width: 100%; max-height: 400px; border: 1px solid #ccc; }
+    .result { text-align: center; margin-top: 20px; }
+    .result span { display: inline-block; width: 50px; height: 50px;
+                   line-height: 50px; margin: 0 5px; border: 1px solid #333;
+                   font-size: 18px; }
+    .result .active { background: orange; }
+    .desc { margin-top: 10px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Diabetic Retinopathy Detector</h1>
+
+    <form method="post" enctype="multipart/form-data">
+      <input type="file" name="file" accept="image/*" required>
+      <button type="submit">Detect</button>
+    </form>
+
+    {% if filename %}
+      <div class="preview">
+        <img src="{{ url_for('static', filename=filename) }}"
+             alt="uploaded image">
+      </div>
+    {% endif %}
+
+    {% if result %}
+      <div class="result">
+        {% for i in range(1,6) %}
+          <span class="{% if i==result.level %}active{% endif %}">{{ i }}</span>
+        {% endfor %}
+        <div class="desc">{{ result.desc }}</div>
+      </div>
+    {% endif %}
+  </div>
+</body>
+</html>

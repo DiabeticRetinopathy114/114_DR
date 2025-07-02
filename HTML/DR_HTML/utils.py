@@ -22,10 +22,10 @@ def postprocess(preds):
     # 假設 preds.shape == (1,5)，五個等級的機率
     class_idx = int(np.argmax(preds, axis=1)[0])
     labels = {
-        0: "無 DR (No DR)",
-        1: "輕度 NPDR (Mild NPDR)",
-        2: "中度 NPDR (Moderate NPDR)",
-        3: "重度 NPDR (Severe NPDR)",
-        4: "增殖性 DR (PDR)"
+        1: "無 DR (No DR)",
+        2: "輕度 NPDR (Mild NPDR)",
+        3: "中度 NPDR (Moderate NPDR)",
+        4: "重度 NPDR (Severe NPDR)",
+        5: "增殖性 DR (PDR)"
     }
     return class_idx, labels[class_idx]
